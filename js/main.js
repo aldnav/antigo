@@ -39,29 +39,32 @@ var GameState = {
 
     this.game.input.onDown.add(this.jump, this);
 
-    this.balloonRed = this.game.add.sprite(700, 1000, 'sprite');
-    this.balloonRed.scale.setTo(1.1);
-    this.balloonRed.animations.add(
-      'fly_balloon',
-      Phaser.Animation.generateFrameNames('balloon_red_', 1, 3, '', 2), 10, true);
-    this.balloonRed.animations.play('fly_balloon');
-
-    this.game.physics.arcade.enable(this.balloonRed, Phaser.Physics.ARCADE);
-    this.game.physics.arcade.accelerateToXY(this.balloonRed, 0, this.balloonRed.y, 180);
-    this.balloonRed.body.gravity.y = -20;
-    this.balloonRed.body.collideWorldBounds = true;
-
-    this.addBalloon(500, 500);
+    // this.addBalloon();
+    // this.addBalloon();
+    this.c = this.addBalloon();
   },
 
 
   update: function() {
     this.bird.angle += this.birdAngleDelta;
 
-    this.game.physics.arcade.collide(this.bird, this.balloonRed);
+    this.game.physics.arcade.collide(this.bird, this.balloons);
 
     // if (this.bird.y < 0 || this.bird.y > 1200)
     //   this.restartGame();
+    var _gameState = this;
+    this.balloons.forEach(function(balloon) {
+      if (balloon.y <= (balloon.height/2.0) * -1 ||
+          balloon.x <= (balloon.width/2.0) * -1) {
+        // balloon.kill();
+        _gameState.killAndRevive(balloon);
+      }
+    });
+  },
+
+
+  render: function() {
+    this.game.debug.spriteInfo(this.c, 64, 64);
   },
 
 
@@ -74,12 +77,23 @@ var GameState = {
   },
 
   hitBalloon: function(bird, balloon) {
-    balloon.destroy();
+    // balloon.destroy();
+    this.killAndRevive(balloon);
+  },
+
+  killAndRevive: function(balloon) {
+    balloon.kill();
+    balloon.revive();
+    balloon.x = this.game.rnd.integerInRange(800, 1600);
+    balloon.y = this.game.rnd.integerInRange(60, 1240);
+    this.game.physics.arcade.accelerateToXY(balloon, 0, balloon.y);
   },
 
 
   // balloon actions
-  addBalloon: function(x, y) {
+  addBalloon: function(x, y, color) {
+      var x = x ? x: this.game.rnd.integerInRange(800, 1600);
+      var y = y ? y: this.game.rnd.integerInRange(60, 1240);
       var balloon = this.game.add.sprite(x, y, 'sprite');
       balloon.scale.setTo(1.1);
       balloon.animations.add(
@@ -87,6 +101,12 @@ var GameState = {
         Phaser.Animation.generateFrameNames('balloon_red_', 1, 3, '', 2), 10, true);
       balloon.animations.play('fly_balloon');
       this.balloons.add(balloon);
+
+      this.game.physics.arcade.enable(balloon, Phaser.Physics.ARCADE);
+      this.game.physics.arcade.accelerateToXY(balloon, 0, balloon.y, 180);
+      // balloon.body.gravity.y = -20;
+      // balloon.body.collideWorldBounds = true;
+      return balloon;
   },
 
 
