@@ -3,6 +3,11 @@ var debug = false;
 var balloonColors = ['red', 'blue', 'green', 'orange', 'yellow'];
 var kiteColors = ['red', 'blue', 'green', 'orange', 'yellow'];
 
+var menus = {
+  pause: {x: 640, y: 20, frame: 'menu_pause'},
+  play: {x: 640, y: 20, frame: 'menu_play'},
+};
+
 var GameState = {
 
 
@@ -10,6 +15,7 @@ var GameState = {
     this.load.image('background', 'assets/images/background.png');
     this.load.spritesheet('bird', 'assets/images/spritesheet.png', 160, 104, 3);
     this.load.atlasJSONHash('sprite', 'assets/images/spritesheet.png', 'assets/sprites.json');
+    this.load.atlasJSONHash('menu_sprite', 'assets/images/menu_spritesheet.png', 'assets/menu_sprites.json');
 
     this.backgroundSpeed = 1;
     this.birdAngleMax = -45;
@@ -52,22 +58,29 @@ var GameState = {
     }
 
 
-    pause_label = game.add.text(720 - 100, 20, 'Pause', { font: '24px Arial', fill: '#fff' });
-    pause_label.inputEnabled = true;
-
-    // this.pauseButton = this.game.add.sprite(0, 0, 'pauseButton');
-    this.pauseButton = pause_label;
+    // Setup menu
+    var pauseMenu = menus.pause;
+    var playMenu = menus.play;
+    this.pauseButton = game.add.sprite(
+      pauseMenu.x, pauseMenu.y, 'menu_sprite');
+    this.pauseButton.frameName = pauseMenu.frame;
     this.pauseButton.inputEnabled = true;
     this.pauseButton.events.onInputUp.add(function () {
       this.game.paused = true;
+      this.pauseButton.frameName = playMenu.frame;
     },this);
 
     this.game.input.onDown.add(function () {
       if (this.game.paused) {
         this.game.paused = false;
+        this.pauseButton.frameName = pauseMenu.frame;
       }
     }, this);
 
+    // game score menus
+
+
+    // Attach event listeners to bird
     this.game.input.onDown.add(this.jump, this);
   },
 
