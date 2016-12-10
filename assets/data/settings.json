@@ -1,0 +1,12 @@
+{
+  "backgroundSpeed": 1,
+  "birdAngleMax": -45,
+  "birdAngleDelta": 0.85,
+  "birdVelocityY": -1000,
+  "birdGravity": 2400,
+  "balloonVelocityX": -300,
+  "numberOfBalloons": 6,
+  "kiteVelocityX": -400,
+  "numberOfKites": 2,
+  "startGoal": 5
+}

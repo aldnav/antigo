@@ -21,22 +21,24 @@ var GameState = {
     this.load.spritesheet('bird', 'assets/images/spritesheet.png', 160, 104, 3);
     this.load.atlasJSONHash('sprite', 'assets/images/spritesheet.png', 'assets/sprites.json');
     this.load.atlasJSONHash('menu_sprite', 'assets/images/menu_spritesheet.png', 'assets/menu_sprites.json');
-
-    this.backgroundSpeed = 1;
-    this.birdAngleMax = -45;
-    this.birdAngleDelta = 0.85;
-    this.birdVelocityY = -1000;
-    this.birdGravity = 2400;
-    this.balloonVelocityX = -300;
-    this.numberOfBalloons = 6;
-    this.kiteVelocityX = -400;
-    this.numberOfKites = 2;
-    this.startGoal = 1;
-    this.balloonsCompleted = [];
+    this.game.load.json('settings', 'assets/data/settings.json');
   },
 
 
   create: function() {
+    var settings = this.game.cache.getJSON('settings');
+    this.backgroundSpeed = settings.backgroundSpeed || 1;
+    this.birdAngleMax = settings.birdAngleMax || -45;
+    this.birdAngleDelta = settings.birdAngleDelta || 0.85;
+    this.birdVelocityY = settings.birdVelocityY || -1000;
+    this.birdGravity = settings.birdGravity || 2400;
+    this.balloonVelocityX = settings.balloonVelocityX || -300;
+    this.numberOfBalloons = settings.numberOfBalloons || 6;
+    this.kiteVelocityX = settings.kiteVelocityX || -400;
+    this.numberOfKites = settings.numberOfKites || 2;
+    this.startGoal = settings.startGoal || 1;
+    this.balloonsCompleted = [];
+
     this.game.paused = true;
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL; // test
