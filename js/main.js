@@ -6,6 +6,11 @@ var kiteColors = ['red', 'blue', 'green', 'orange', 'yellow'];
 var menus = {
   pause: {x: 640, y: 20, frame: 'menu_pause'},
   play: {x: 640, y: 20, frame: 'menu_play'},
+  redScoreBoard: {x: 20, y: 20, frame: 'score_board_red', board: true},
+  yellowScoreBoard: {x: 140, y: 20, frame: 'score_board_yellow', board: true},
+  orangeScoreBoard: {x: 260, y: 20, frame: 'score_board_orange', board: true},
+  blueScoreBoard: {x: 380, y: 20, frame: 'score_board_blue', board: true},
+  greenScoreBoard: {x: 500, y: 20, frame: 'score_board_green', board: true},
 };
 
 var GameState = {
@@ -20,16 +25,19 @@ var GameState = {
     this.backgroundSpeed = 1;
     this.birdAngleMax = -45;
     this.birdAngleDelta = 0.85;
-    this.birdVelocityY = -1100;
+    this.birdVelocityY = -1000;
     this.birdGravity = 2400;
     this.balloonVelocityX = -300;
     this.numberOfBalloons = 6;
     this.kiteVelocityX = -400;
     this.numberOfKites = 2;
+    this.startGoal = 1;
+    this.balloonsCompleted = [];
   },
 
 
   create: function() {
+    this.game.paused = true;
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL; // test
     // this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT; // deploy
@@ -57,6 +65,40 @@ var GameState = {
       this.addKite();
     }
 
+    // score boards
+    this.boards = [];
+    this.texts = {};
+    for (var o in menus) {
+      if (menus.hasOwnProperty(o) && menus[o].board === true) {
+        var menu = menus[o];
+        var scoreBoard = game.add.sprite(
+          menu.x, menu.y, 'menu_sprite');
+        scoreBoard.frameName = menu.frame;
+        var style = {
+          font: '46px OpenDyslexic',
+          fontSizeWeight: 'bold',
+          fill: '#ffffff',
+          stroke: '#000000',
+          strokeThickness: 4,
+          align: 'center',
+          wordWrap: true,
+          wordWrapWidth: scoreBoard.width
+        };
+        var text = game.add.text(
+          (scoreBoard.x + scoreBoard.width/2) + 20,
+          (scoreBoard.y + scoreBoard.height/2) - 8,
+          '' + this.startGoal + '',
+          style
+        );
+        text.anchor.set(0.5);
+        var colorName = menu.frame.split('_');
+        colorName = colorName[colorName.length-1];
+        text._ID_name = colorName;
+        text._ID_intValue = this.startGoal;
+        this.texts[text._ID_name] = text;
+        this.boards.push(scoreBoard);
+      }
+    }
 
     // Setup menu
     var pauseMenu = menus.pause;
@@ -76,9 +118,6 @@ var GameState = {
         this.pauseButton.frameName = pauseMenu.frame;
       }
     }, this);
-
-    // game score menus
-
 
     // Attach event listeners to bird
     this.game.input.onDown.add(this.jump, this);
@@ -123,6 +162,22 @@ var GameState = {
   },
 
   hitBalloon: function(bird, balloon) {
+    var scoreText = this.texts[balloon._ID_color];
+    if (scoreText._ID_intValue > 0) {
+      scoreText._ID_intValue--;
+      scoreText.text = scoreText._ID_intValue;
+    }
+    if (scoreText._ID_intValue <= 0) {
+      scoreText.text = '✓';
+      if (this.balloonsCompleted.indexOf(scoreText._ID_name) <= -1) {
+        this.balloonsCompleted.push(scoreText._ID_name);
+      }
+    }
+
+    if (this.balloonsCompleted.length === balloonColors.length) {
+      console.log('complete!');
+      this.game.paused = true;
+    }
     this.killAndRevive(balloon);
   },
 
@@ -153,8 +208,8 @@ var GameState = {
   },
 
   generateBalloonAnimation: function(balloon) {
-    balloon.color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
-    var framePrefix = 'balloon_' + balloon.color + '_';
+    balloon._ID_color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+    var framePrefix = 'balloon_' + balloon._ID_color + '_';
     balloon.animations.add(
       'fly_balloon',
       Phaser.Animation.generateFrameNames(framePrefix, 1, 3, '', 2), 10, true);
