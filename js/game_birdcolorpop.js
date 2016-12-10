@@ -39,7 +39,7 @@ var GameState = {
     this.startGoal = settings.startGoal || 1;
     this.balloonsCompleted = [];
 
-    this.game.paused = true;
+    // this.game.paused = true;
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL; // test
     // this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT; // deploy
@@ -105,21 +105,54 @@ var GameState = {
     // Setup menu
     var pauseMenu = menus.pause;
     var playMenu = menus.play;
+    var menuDialog;
+    // var playFromDialogButton;
+    var w = game.width, h = game.height;
+
     this.pauseButton = game.add.sprite(
       pauseMenu.x, pauseMenu.y, 'menu_sprite');
+    pauseButton = this.pauseButton;
     this.pauseButton.frameName = pauseMenu.frame;
     this.pauseButton.inputEnabled = true;
     this.pauseButton.events.onInputUp.add(function () {
       this.game.paused = true;
       this.pauseButton.frameName = playMenu.frame;
+
+      // show menu dialog
+      menuDialog = game.add.sprite(w/2, h/2, 'menu_sprite_2');
+      menuDialog.frameName = 'popup_menu_div';
+      menuDialog.anchor.setTo(0.5);
+      menuDialog.scale.set(4);
+
+      playFromDialogButton = game.add.sprite(menuDialog.width/2, menuDialog.height/2 - 100, 'menu_sprite');
+      playFromDialogButton.frameName = 'menu_play';
+      playFromDialogButton.anchor.setTo(0.5);
+      playFromDialogButton.scale.set(1.5);
+      playFromDialogButton.inputEnabled = true;
+      playFromDialogButton.events.onInputDown.add(unpause, this);
     },this);
 
-    this.game.input.onDown.add(function () {
+    this.game.input.onDown.add(function (e) {
       if (this.game.paused) {
-        this.game.paused = false;
-        this.pauseButton.frameName = pauseMenu.frame;
+        // calculate event position
+        // if outside dialog, continue to play
+        var x1 = w/2 - menuDialog.width/2, x2 = w/2 + menuDialog.width/2,
+            y1 = h/2 - menuDialog.height/2, y2 = h/2 + menuDialog.height/2;
+        if (e.x > x1 && e.x < x2 && e.y > y1 && e.y < y2) {
+          return;
+        } else {
+          unpause();
+        }
       }
     }, this);
+
+    function unpause() {
+      console.log('unpause');
+      menuDialog.destroy();
+      playFromDialogButton.destroy();
+      game.paused = false;
+      pauseButton.frameName = pauseMenu.frame;
+    }
 
     // Attach event listeners to bird
     this.game.input.onDown.add(this.jump, this);
@@ -157,6 +190,9 @@ var GameState = {
 
   // bird actions
   jump: function(o) {
+    if (this.game.paused) {
+      return;
+    }
     this.bird.body.velocity.y = this.birdVelocityY;
     if (this.bird.angle > this.birdAngleMax) {
       this.bird.angle = this.birdAngleMax/2;
