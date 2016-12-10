@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "http-server -p 8000"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,6 @@
   },
   "homepage": "https://gitlab.com/teammaja/birdgame#README",
   "dependencies": {
-    "http-server": "^0.9.0"
+    "express": "^4.14.0"
   }
 }
