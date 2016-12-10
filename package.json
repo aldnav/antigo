@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://gitlab.com/teammaja/birdgame/issues"
   },
-  "homepage": "https://gitlab.com/teammaja/birdgame#README"
+  "homepage": "https://gitlab.com/teammaja/birdgame#README",
+  "dependencies": {
+    "http-server": "^0.9.0"
+  }
 }
