@@ -1,0 +1,19 @@
+{
+  "name": "birdgame",
+  "version": "1.0.0",
+  "description": "Bird game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/teammaja/birdgame.git"
+  },
+  "author": "Antigo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/teammaja/birdgame/issues"
+  },
+  "homepage": "https://gitlab.com/teammaja/birdgame#README"
+}
