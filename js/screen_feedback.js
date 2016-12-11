@@ -9,14 +9,14 @@ var ScreenFeedbackState = {
     var hearts = game.add.group();
     var startX = game.width/2 - 100;
     var lives = player.lives;
+    if (player.lastAttemptStatus === 'lose') {
+      lives++;
+    }
 
     this.displayScore = player.rallyScore;
     this.displayMerit = player.merit;
     this.displayDemerit = player.demerit;
 
-    if (lives < 3) {
-      lives++;
-    }
     for (var i = 0; i < lives; i++) {
       var life = game.add.sprite(startX + 100*i, game.height/2, 'menu_sprite_2', 'heart_1');
       life.anchor.setTo(0.5);

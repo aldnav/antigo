@@ -18,7 +18,7 @@ var gamification = {
   lose: function(demerit) {
     player.demerit = demerit ? demerit: 0;
     player.lastAttemptStatus = 'lose';
-    player.lives--;
+    --player.lives;
     if (player.lives <= 0) {
       player.gameOver = true;
     }
