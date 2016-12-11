@@ -167,6 +167,7 @@ var GameState = {
     function quit() {
       reg.modal.hideModal('modal1');
       game.paused = false;
+      player.gameOver = true;
       game.state.start('screen_rewards');
     }
 
