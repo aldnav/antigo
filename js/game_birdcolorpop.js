@@ -38,6 +38,7 @@ var GameState = {
     this.numberOfKites = settings.numberOfKites || 2;
     this.startGoal = settings.startGoal || 1;
     this.balloonsCompleted = [];
+    reg.modal = new gameModal(game);
 
     // this.game.paused = true;
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -103,11 +104,35 @@ var GameState = {
     }
 
     // Setup menu
+    reg.modal.createModal({
+      type: "modal1",
+      includeBackground: true,
+      modalCloseOnInput: true,
+      itemsArr: [{
+          type: "text",
+          content: "PAHUWAY!",
+          fontFamily: "OpenDyslexic",
+          fontSize: 60,
+          color: "0xffffff",
+          offsetY: -150
+        }, {
+          type: "sprite",
+          atlasParent: "menu_sprite",
+          content: "menu_play",
+          offsetX: -90,
+          contentScale: 2.0
+        }, {
+          type: "image",
+          content: "exit_btn",
+          offsetX: 90,
+          contentScale: 0.6
+        }
+      ]
+    });
+
+    // Setup menu
     var pauseMenu = menus.pause;
     var playMenu = menus.play;
-    var menuDialog;
-    // var playFromDialogButton;
-    var w = game.width, h = game.height;
 
     this.pauseButton = game.add.sprite(
       pauseMenu.x, pauseMenu.y, 'menu_sprite');
@@ -115,43 +140,35 @@ var GameState = {
     this.pauseButton.frameName = pauseMenu.frame;
     this.pauseButton.inputEnabled = true;
     this.pauseButton.events.onInputUp.add(function () {
-      this.game.paused = true;
       this.pauseButton.frameName = playMenu.frame;
 
       // show menu dialog
-      menuDialog = game.add.sprite(w/2, h/2, 'menu_sprite_2');
-      menuDialog.frameName = 'popup_menu_div';
-      menuDialog.anchor.setTo(0.5);
-      menuDialog.scale.set(4);
-
-      playFromDialogButton = game.add.sprite(menuDialog.width/2, menuDialog.height/2 - 100, 'menu_sprite');
-      playFromDialogButton.frameName = 'menu_play';
-      playFromDialogButton.anchor.setTo(0.5);
-      playFromDialogButton.scale.set(1.5);
-      playFromDialogButton.inputEnabled = true;
-      playFromDialogButton.events.onInputDown.add(unpause, this);
-    },this);
+      reg.modal.showModal('modal1');
+      this.game.paused = true;
+    }, this);
 
     this.game.input.onDown.add(function (e) {
       if (this.game.paused) {
-        // calculate event position
-        // if outside dialog, continue to play
-        var x1 = w/2 - menuDialog.width/2, x2 = w/2 + menuDialog.width/2,
-            y1 = h/2 - menuDialog.height/2, y2 = h/2 + menuDialog.height/2;
-        if (e.x > x1 && e.x < x2 && e.y > y1 && e.y < y2) {
-          return;
-        } else {
+        var playModalBtn = reg.modal.getModalItem('modal1', 3);
+        var exitModalBtn = reg.modal.getModalItem('modal1', 4);
+        if (playModalBtn.getBounds().contains(game.input.x, game.input.y)) {
           unpause();
+        } else if (exitModalBtn.getBounds().contains(game.input.x, game.input.y)) {
+          quit();
         }
       }
     }, this);
 
     function unpause() {
-      console.log('unpause');
-      menuDialog.destroy();
-      playFromDialogButton.destroy();
+      reg.modal.hideModal('modal1');
       game.paused = false;
       pauseButton.frameName = pauseMenu.frame;
+    }
+
+    function quit() {
+      reg.modal.hideModal('modal1');
+      game.paused = false;
+      game.state.start('screen_rewards');
     }
 
     // Attach event listeners to bird
