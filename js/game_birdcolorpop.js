@@ -40,7 +40,6 @@ var GameState = {
     this.balloonsCompleted = [];
     reg.modal = new gameModal(game);
 
-    // this.game.paused = true;
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL; // test
     // this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT; // deploy
@@ -180,10 +179,13 @@ var GameState = {
     this.bird.angle += this.birdAngleDelta;
 
     this.game.physics.arcade.collide(this.bird, this.balloons, this.hitBalloon, null, this);
-    this.game.physics.arcade.collide(this.bird, this.kites, this.restartGame);
+    this.game.physics.arcade.collide(this.bird, this.kites, this.gameOver);
 
-    if (this.bird.y < 60 || this.bird.y > 1200)
-      this.restartGame();
+    if (this.bird.y < 60 || this.bird.y > 1200) {
+      // this.restartGame();
+      this.gameOver();
+    }
+
     var _gameState = this;
     this.balloons.forEach(function(balloon) {
       if (balloon.y <= (balloon.height/2.0) * -1 ||
@@ -231,7 +233,9 @@ var GameState = {
 
     if (this.balloonsCompleted.length === balloonColors.length) {
       console.log('complete!');
-      this.game.paused = true;
+      gamification.win();
+      game.state.start('screen_feedback');
+      // this.game.paused = true;
     }
     this.killAndRevive(balloon);
   },
@@ -306,13 +310,19 @@ var GameState = {
   },
 
   hitKite: function(bird, kite) {
-    this.restartGame();
+    // this.restartGame();
+    this.gameOver();
   },
 
 
   // game actions
   restartGame: function() {
     game.state.start('play_birdcolorpop');
+  },
+
+  gameOver: function() {
+    gamification.lose();
+    game.state.start('screen_feedback');
   }
 };
 

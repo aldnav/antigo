@@ -1,6 +1,9 @@
 var ScreenRewardState = {
 
   create: function() {
+    if (player.gameOver) {
+      gamification.reset();
+    }
     game.stage.backgroundColor = "#4488AA";
     var centerX = game.width/2;
     var centerY = game.height/2;
