@@ -25,7 +25,7 @@ var letterPoints = {
 var GameLetterTraceState = {
     create: function() {
         this.letter = 'A';
-        this.goalPoints = letterPoints[this.letter];
+        this.goalPoints = letterPoints[this.letter].slice(0);
         game.stage.backgroundColor = '#57D37D';
         var style = {
           font: '600px DNManuscript',
@@ -125,7 +125,7 @@ var GameLetterTraceState = {
         }
 
         function cursorOnPath(letter, point, allowance) {
-            var targetPoints = letterPoints[letter];
+            var targetPoints = _this.goalPoints;
             for (var i = 0; i < targetPoints.length; i++) {
                 var targetPoint = targetPoints[i];
                 if ((point.x >= targetPoint[0] - allowance && point.x <= targetPoint[0] + allowance) &&

@@ -17,8 +17,8 @@ gameModal = function (game) {
      * @return {[type]}      [description]
      */
     this.hideModal = function (type) {
-        window.console.log(type);
         game.modals[type].visible = false;
+        return type;
     };
 
     return {
