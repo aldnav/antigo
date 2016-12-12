@@ -38,12 +38,59 @@ var GameLetterTraceState = {
         graphics = game.add.graphics(0, 0);
         graphics.anchor.set(0.5);
 
+
+
+        // Setup menu
+        reg.modal = new gameModal(game);
+        reg.modal.createModal({
+          type: "modal2",
+          includeBackground: true,
+          modalCloseOnInput: true,
+          itemsArr: [{
+              type: "text",
+              content: "PAHUWAY!",
+              fontFamily: "OpenDyslexic",
+              fontSize: 60,
+              color: "0xffffff",
+              offsetY: -150
+            }, {
+              type: "sprite",
+              atlasParent: "menu_sprite",
+              content: "menu_play",
+              offsetX: -90,
+              contentScale: 2.0,
+            }, {
+              type: "image",
+              content: "exit_btn",
+              offsetX: 90,
+              contentScale: 0.6,
+              callback: function() {
+                  reg.modal.hideModal('modal2');
+                  player.gameOver = true;
+                  game.state.start('screen_rewards');
+              }
+            }
+          ]
+        });
+
+        this.pauseButton = game.add.sprite(
+          640, 20, 'menu_sprite', 'menu_pause');
+        this.pauseButton.inputEnabled = true;
+        this.pauseButton.events.onInputUp.add(function () {
+
+          // show menu dialog
+          reg.modal.showModal('modal2');
+        }, this);
+
         this.game.input.onDown.add(this.startDraw, this);
         this.game.input.onUp.add(this.endDraw, this);
     },
 
     startDraw: function() {
-        this.drawOn = true;
+        if (!game.modals['modal2'].visible &&
+            !this.pauseButton.getBounds().contains(game.input.x, game.input.y)) {
+            this.drawOn = true;
+        }
     },
 
     endDraw: function() {
@@ -75,7 +122,6 @@ var GameLetterTraceState = {
 
         function drawEnd() {
             graphics.endFill();
-            var onPath = cursorOnPath(_this.letter, {x: game.input.x, y: game.input.y}, 10);
         }
 
         function cursorOnPath(letter, point, allowance) {
