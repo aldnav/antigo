@@ -172,7 +172,7 @@ var GameState = {
     }
 
     // Attach event listeners to bird
-    this.game.input.onDown.add(this.jump, this);
+    this.game.input.onTap.add(this.jump, this);
   },
 
 

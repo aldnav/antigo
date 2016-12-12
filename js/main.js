@@ -38,5 +38,6 @@ game.state.add('menu', MenuState);
 game.state.add('screen_rewards', ScreenRewardState);
 game.state.add('screen_feedback', ScreenFeedbackState);
 game.state.add('play_birdcolorpop', GameState); // label is temporary
+game.state.add('play_lettertrace', GameLetterTraceState);
 
 game.state.start('boot');

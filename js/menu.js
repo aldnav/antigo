@@ -20,7 +20,7 @@ var MenuState = {
     playButton.scale.setTo(3);
 
     var style = {
-      font: '60px OpenDyslexic',
+      font: '56px OpenDyslexic',
       fontSizeWeight: 'bold',
       fill: '#000000',
       stroke: '#ffffff',

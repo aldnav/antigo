@@ -5,15 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>Birdgame</title>
     <script type="text/javascript" src="js/phaser.min.js"></script>
+    <script type="text/javascript" src="js/webfont.js"></script>
+    <script type="text/javascript">
+        WebFont.load({
+            custom: {
+                families: ['OpenDyslexic', 'DNManuscript']
+            }
+        });
+    </script>
     <style>
       body {
         padding: 0px;
         margin: 0px;
         background: black;
+        color: white;
       }
       @font-face {
         font-family: 'OpenDyslexic';
-        src: url('assets/fonts/OpenDyslexicMono-Regular.otf')  format('opentype'),
+        src: url('assets/fonts/OpenDyslexicMono-Regular.otf')  format('opentype');
+      }
+      @font-face {
+        font-family: 'DNManuscript';
+        src: url('assets/fonts/dnmanuscriptdotsarrrules.ttf')  format('truetype');
       }
     </style>
   </head>
@@ -24,6 +37,7 @@
     <script src="js/screen_rewards.js"></script>
     <script src="js/screen_feedback.js"></script>
     <script src="js/game_birdcolorpop.js"></script>
+    <script src="js/game_lettertrace.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
