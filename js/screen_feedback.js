@@ -68,7 +68,8 @@ var ScreenFeedbackState = {
     playBtn.scale.setTo(1.5);
     playBtn.events.onInputDown.add(function() {
       // @NOTE: point to game chooser and hit play
-      game.state.start('play_birdcolorpop');
+    //   game.state.start('play_birdcolorpop');
+      game.state.start(gamification.getNextGame());
     });
 
     var quitBtn = game.add.sprite(game.width/2 + 75, game.height/2 + 300, 'exit_btn');

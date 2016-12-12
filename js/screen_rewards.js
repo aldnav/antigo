@@ -29,6 +29,7 @@ var ScreenRewardState = {
   playGame: function() {
     // @NOTE: do the random sampling of mini-games
     // game.state.start('play_birdcolorpop');
-    game.state.start('play_lettertrace');
+    // game.state.start('play_lettertrace');
+    game.state.start(gamification.getNextGame());
   }
 };

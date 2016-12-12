@@ -10,6 +10,8 @@ var player = {
   gameOver: false
 };
 var gamification = {
+  gameSequence: ['play_lettertrace', 'play_birdcolorpop'],
+  gameSequenceIndex: 0,
   win: function(merit) {
     player.merit = merit ? merit: 100;
     player.lastAttemptStatus = 'win';
@@ -30,6 +32,16 @@ var gamification = {
     player.merit = 0;
     player.demerit = 0;
     player.gameOver = false;
+  },
+
+  getNextGame: function() {
+    var g = this.gameSequence[this.gameSequenceIndex];
+    if (this.gameSequenceIndex + 1 >= this.gameSequence.length) {
+        this.gameSequenceIndex = 0;
+    } else {
+        this.gameSequenceIndex++;
+    }
+    return g;
   }
 };
 
