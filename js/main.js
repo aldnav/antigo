@@ -10,7 +10,7 @@ var player = {
   gameOver: false
 };
 var gamification = {
-  gameSequence: ['play_lettertrace', 'play_birdcolorpop'],
+  gameSequence: ['play_birdcolorpop', 'play_lettertrace'],
   gameSequenceIndex: 0,
   win: function(merit) {
     player.merit = merit ? merit: 100;
