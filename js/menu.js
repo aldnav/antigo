@@ -3,6 +3,7 @@ var MenuState = {
     game.load.image('screen_menu', 'assets/images/main_splash_menu.png');
     this.load.image('background', 'assets/images/background.png');
     this.load.image('exit_btn', 'assets/images/exit_btn.png');
+    this.load.image('pets', 'assets/images/pets.png');
     this.load.spritesheet('bird', 'assets/images/spritesheet.png', 160, 104, 3);
     this.load.atlasJSONHash('sprite', 'assets/images/spritesheet.png', 'assets/sprites.json');
     this.load.atlasJSONHash('menu_sprite', 'assets/images/menu_spritesheet.png', 'assets/menu_sprites.json');

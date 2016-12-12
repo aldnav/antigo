@@ -8,6 +8,10 @@ var ScreenRewardState = {
     var centerX = game.width/2;
     var centerY = game.height/2;
 
+    var pets = game.add.sprite(centerX, centerY, 'pets');
+    pets.anchor.setTo(0.5);
+    pets.scale.set(1.2);
+
     var settingsButton = game.add.sprite(centerX + 100, game.height - 200, 'menu_sprite_2');
     settingsButton.frameName = 'menu_settings';
     settingsButton.anchor.setTo(0.5);
